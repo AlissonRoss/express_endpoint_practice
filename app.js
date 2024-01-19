@@ -49,6 +49,17 @@ app.get('/car', async function(req, res) {
     res.status(400).json({msg: 'Error getting all cars'})
   }
 });
+//GET ONE car
+app.get('/car/:id', async function (req, res) {
+  try{
+    const id = req.params.id;
+    const [q] = await pool.query('SELECT * FROM `car` WHERE id=:id', {id} );
+    res.json(q);
+  }catch(err){
+    res.status(400).json({msg: 'Error getting car at', data:id})
+  }
+  
+});
 
 app.use(async function(req, res, next) {
   try {
@@ -112,7 +123,9 @@ app.put('/car/:id', async function(req,res) {
       year,
       id
   });
-    res.status(200).json({success: true, message:'SUCCESS Car successfully updated', data: req.params});
+  //UpdatedCar returns the response data from the database with the specified id
+  const updatedCar = await pool.query('SELECT * FROM `car` WHERE id=?', [id]);
+  res.status(200).json({success: true, message:'SUCCESS Car successfully updated', data: updatedCar[0]});
   } catch (err) {
     res.status(400).json({success: false, message:'FAILED to update car', data: err});
   }
