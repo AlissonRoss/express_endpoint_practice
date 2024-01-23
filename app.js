@@ -43,7 +43,7 @@ app.use(express.json());
 app.get('/car', async function(req, res) {
   try {
     console.log('/car/:id')
-    const [q] = await pool.query('SELECT * FROM `car`' );
+    const [q] = await pool.query('SELECT * FROM `car` WHERE deleted_flag=0' );
     res.json(q);
   } catch (err) {
     res.status(400).json({msg: 'Error getting all cars'})
