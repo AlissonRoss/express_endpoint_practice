@@ -124,7 +124,7 @@ app.put('/car/:id', async function(req,res) {
       id
   });
   //UpdatedCar returns the response data from the database with the specified id
-  const updatedCar = await pool.query('SELECT * FROM `car` WHERE id=?', [id]);
+  const updatedCar = await pool.query('SELECT * FROM `car` WHERE id=:id', {id});
   res.status(200).json({success: true, message:'SUCCESS Car successfully updated', data: updatedCar[0]});
   } catch (err) {
     res.status(400).json({success: false, message:'FAILED to update car', data: err});
